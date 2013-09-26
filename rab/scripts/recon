@@ -1,0 +1,9 @@
+#!/usr/bin/python
+import sys
+from rab import database as db
+
+fname = sys.argv.pop(0)
+org, new = sys.argv
+
+file = db.File.from_path(org)
+file.reconstruct(new)

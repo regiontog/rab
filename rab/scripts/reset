@@ -1,0 +1,15 @@
+#!/usr/bin/python
+from rab import database as db
+
+with db.blocks as con:
+    con.execute("DROP TABLE IF EXISTS hashmap")
+    con.execute("CREATE TABLE hashmap(key INT, size INT, value BLOB)")
+
+with db.snapshot as con:
+    con.execute("DROP TABLE IF EXISTS file")
+    con.execute("DROP TABLE IF EXISTS file_block")
+    con.execute("DROP TABLE IF EXISTS metadata")
+
+    con.execute("CREATE TABLE file(id INTEGER PRIMARY KEY, name TEXT, path TEXT UNIQUE)")
+    con.execute("CREATE TABLE file_block(block_key INT, file_id INT, begin INT)")
+    con.execute("CREATE TABLE metadata(name TEXT)")
