@@ -23,14 +23,14 @@ class File():
     @classmethod
     def from_id(cls, id):
         with snapshot as con:
-            path = con.execute("SELECT path FROM file WHERE id=?", (id,)).fetchone()
+            path = con.execute("SELECT path FROM file WHERE id=?", (id,)).fetchone()[0]
 
         return cls(path, id)
 
     @classmethod
     def from_path(cls, path):
         with snapshot as con:
-            id = con.execute("SELECT id FROM file WHERE path=?", (path,)).fetchone()
+            id = con.execute("SELECT id FROM file WHERE path=?", (path,)).fetchone()[0]
 
         return cls(path, id)
 
@@ -39,11 +39,11 @@ class File():
 
         with snapshot as con:
             con.execute("REPLACE INTO file(name, path) VALUES(?, ?)", tuple)
-            return con.execute("SELECT id FROM file WHERE path=?", (self.path,)).fetchone()
+            return con.execute("SELECT id FROM file WHERE path=?", (self.path,)).fetchone()[0]
 
     def add_block(self, begin, block):
         with snapshot as con:
-            tuple = hash(block), self.id[0], begin
+            tuple = hash(block), self.id, begin
             con.execute("REPLACE INTO file_block(block_key, file_id, begin) VALUES(?, ?, ?)", tuple)
 
     def blocks(self):
