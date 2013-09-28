@@ -28,7 +28,7 @@ def each(paths):
 
 
 def read_file(file):
-    blob = {'data':''} ##Fix: nonlocal workaround
+    blob = {'data': ''} ##Fix: nonlocal workaround
     def block_reached(offset, size, fp):
         head = blob["data"][:size]
         tail = blob["data"][size:]
@@ -54,7 +54,7 @@ def read_file(file):
             while "read":
                 data = f.read(buffer_size)
                 if not data: break
-                blob['data'] = ''.join([blob["data"], data])
+                blob["data"] = ''.join([blob["data"], data])
                 r.update(data)
 
             block_reached(os.path.getsize(file)-len(blob['data']), len(blob['data']), None)
