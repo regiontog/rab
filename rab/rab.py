@@ -1,6 +1,6 @@
 import os
 import rabin
-import database as db
+from parse import Parse
 
 def _setup():
     kb = 1024
@@ -17,8 +17,8 @@ def main(argv):
     paths = argv
     _setup()
 
-    for file in each(paths):
-        read_file(file)
+    for path in each(paths):
+        Parse.parser(path)
 
 def each(paths):
     for path in paths:
@@ -28,38 +28,3 @@ def each(paths):
                     yield os.path.join(root, basename)
         else:
             yield path
-
-
-def read_file(file):
-    blob = {'data': ''} ##Fix: nonlocal workaround
-    def block_reached(offset, size, fp):
-        head = blob["data"][:size]
-        tail = blob["data"][size:]
-        blob["data"] = tail
-
-        block   = db.Block.from_blob(head, size)
-        db_file = db.File.from_path(file)
-
-        if not block.exists():
-            block.store()
-            print "Inserting", block
-        else:
-            print "-----> Block", block, "already exists"
-
-        db_file.add_block(offset, block)
-
-
-    r = rabin.Rabin()
-    r.register(block_reached)
-
-    if os.access(file, os.R_OK):
-        with open(file, 'rb') as f:
-            while "read":
-                data = f.read(buffer_size)
-                if not data: break
-                blob["data"] = ''.join([blob["data"], data])
-                r.update(data)
-
-            block_reached(os.path.getsize(file)-len(blob['data']), len(blob['data']), None)
-    else:
-        print "No read access on file", file
