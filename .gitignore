@@ -1,3 +1,3 @@
 *.pyc
-rab/tests/recon
+rab/tests/testing.db
 rab/tests/test_file

@@ -1,0 +1,9 @@
+[submodule "lib/docopt"]
+	path = lib/docopt
+	url = https://github.com/docopt/docopt.git
+[submodule "lib/mmh3"]
+	path = lib/mmh3
+	url = https://github.com/hajimes/mmh3.git
+[submodule "lib/python-rabin-fingerprint"]
+	path = lib/python-rabin-fingerprint
+	url = https://github.com/aitjcize/pyrabin.git
