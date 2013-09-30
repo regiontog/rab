@@ -7,10 +7,13 @@ config_dir   = os.path.join(home_dir  , ".rab")
 data_dir     = os.path.join(config_dir, "data")
 snapshot_dir = os.path.join(config_dir, "snapshots")
 
-snapshot_name = "test"
-
 blocks = sqlite3.connect(os.path.join(data_dir, "blocks.db"))
-snapshot = sqlite3.connect(os.path.join(snapshot_dir, snapshot_name))
+snapshot = sqlite3.connect(os.path.join(snapshot_dir, "default"))
+
+def set_snapshot(name):
+    global snapshot
+    snapshot = sqlite3.connect(os.path.join(snapshot_dir, name))
+
 
 class File():
     def __init__(self, path, id):

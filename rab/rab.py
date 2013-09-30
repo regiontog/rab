@@ -2,17 +2,20 @@ import os
 import rabin
 import database as db
 
-kb = 1024
-buffer_size = 1*kb
-rabin.set_window_size(48)
-rabin.set_min_block_size(8*kb)
-rabin.set_average_block_size(64*kb-1)
-rabin.set_max_block_size(256*kb)
+def _setup():
+    kb = 1024
+    rabin.set_window_size(48)
+    rabin.set_min_block_size(8*kb)
+    rabin.set_average_block_size(64*kb-1)
+    rabin.set_max_block_size(256*kb)
 
+    Parse.rab = rabin.Rabin()
+    Parse.rab.register(Parse._block_reached)
 
 def main(argv):
     fname = argv.pop(0)
     paths = argv
+    _setup()
 
     for file in each(paths):
         read_file(file)
