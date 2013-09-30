@@ -6,13 +6,14 @@ from rab.database import snapshot, block
 from rab.parse import Parse
 from rab.rab import _setup
 
+root = os.path.dirname(mod_path) + "/tests/"
+
 _setup()
-snapshot.set("testing")
+snapshot.set(root + "testing.db")
 snapshot.delete()
 snapshot.create()
 block.reset()
 
-root = os.path.dirname(mod_path) + "/tests/"
 
 def test_parser_and_reconstruct():
     import filecmp

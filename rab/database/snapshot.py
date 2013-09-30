@@ -3,9 +3,9 @@ import os.path
 from rab.database import _get, snapshot_dir, block
 from rab.database import snapshot_con as snapshot
 
-def set(name):
+def set(path):
     global snapshot
-    snapshot = sqlite3.connect(os.path.join(snapshot_dir, name))
+    snapshot = sqlite3.connect(path)
 
 def create():
     with snapshot as con:
