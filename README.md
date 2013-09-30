@@ -4,10 +4,9 @@ TODO
 ----
 1. Refactor docopt
 2. Add docs
-3. Implement logger
-4. Make setup.py work
-5. Make tests for syntax
-6. Recognize modified files and handle them correctly
+3. Make setup.py work
+4. Make tests for syntax
+5. Recognize modified files and handle them correctly
 
 Featureset for v1.0.0
 ---------------------
