@@ -15,6 +15,7 @@ Options:
 import os
 import rabin
 from parse import Parse
+from utils import map_args, each
 from docopt import docopt
 from database import block, snapshot
 
@@ -28,41 +29,35 @@ def _setup():
     Parse.rab = rabin.Rabin()
     Parse.rab.register(Parse._block_reached)
 
-def main(argv):
-    _setup()
+def create(paths):
+    for path in paths:
+        snapshot.set(path)
+        snapshot.create()
 
+def delete(paths):
+    for path in paths:
+        snapshot.set(path)
+        snapshot.delete()
+
+def recon(name, file, paths):
+    snapshot.set(name)
+    file = snapshot.File.from_path(file)
+    file.reconstruct(paths[0])
+
+def add(name, paths):
+    snapshot.set(name)
+    for path in each([p for p in paths]):
+        Parse.parser(path)
+
+def main():
+    _setup()
     args = docopt(__doc__, version='rab version 0.1.1')
 
     if args['snapshot']:
-        if args['create']:
-            for path in args['PATH']:
-                snapshot.set(path)
-                snapshot.create()
+        map_args(args, {'add'         : [add   , '<name>', 'PATH'] ,            # -> add(args['<name>'], args['PATH'])
+                        'create'      : [create, 'PATH'] ,                      # -> create(args['PATH'])
+                        'delete'      : [delete, 'PATH'] ,                      # -> delete(args['PATH'])
+                        'reconstruct' : [recon , '<name>', '<file>', 'PATH']})  # -> recon(args['<name>'], args['<file>'], args['PATH'])
 
-        elif args['delete']:
-            for path in args['PATH']:
-                snapshot.set(path)
-                snapshot.delete()
-
-        elif args['reconstruct']:
-            snapshot.set(args['<name>'])
-            file = snapshot.File.from_path(args['<file>'])
-            file.reconstruct(args['PATH'][0])
-
-        elif args['add']:
-            snapshot.set(args['<name>'])
-            for path in each([p for p in args['PATH']]):
-                Parse.parser(path)
-
-    elif args['blocks'] and args['delete']:
-        block.reset()
-
-
-def each(paths):
-    for path in paths:
-        if os.path.isdir(path):
-            for root, dirs, files in os.walk(path):
-                for basename in files:
-                    yield os.path.join(root, basename)
-        else:
-            yield path
+    elif args['blocks']:
+        map_args(args, {'delete': [block.reset]})
