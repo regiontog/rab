@@ -2,10 +2,11 @@ Backup program
 ==============
 TODO
 ----
-1. Create nosetests
+1. Refactor docopt
 2. Add docs
-3. Make read_file(file) easier to read and understand
-4. Work out the command syntax
+3. Implement logger
+4. Make setup.py work
+5. Make tests for syntax
 
 Featureset for v1.0.0
 ----
