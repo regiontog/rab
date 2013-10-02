@@ -47,26 +47,6 @@ def add(name, paths):
         logger.info("Adding file %s to snapshot %s" % (path, name))
         Parse.parser(path)
 
-def create(paths):
-    for path in paths:
-        snapshot.set(path)
-        snapshot.create()
-
-def delete(paths):
-    for path in paths:
-        snapshot.set(path)
-        snapshot.delete()
-
-def recon(name, file, paths):
-    snapshot.set(name)
-    file = snapshot.File.from_path(file)
-    file.reconstruct(paths[0])
-
-def add(name, paths):
-    snapshot.set(name)
-    for path in each([p for p in paths]):
-        Parse.parser(path)
-
 def main():
     _setup()
     args = docopt(__doc__, version='rab version 0.1.1')
