@@ -1,9 +1,14 @@
 import sqlite3
+import logging
 import os.path
-from rab.database import _get, snapshot_dir, block
 from rab.database import snapshot_con as snapshot
+from rab.database import _get, snapshot_dir, block
+
+logger = logging.getLogger(__name__)
 
 def set(path):
+    logger.debug("Setting snapshot to %s" % path)
+
     global snapshot
     snapshot = sqlite3.connect(path)
 
@@ -62,5 +67,6 @@ class File():
     def reconstruct(self, target):
         with open(target, 'wb') as f:
             for offset, block in self.blocks():
+                logger.debug("Writing to file %s with offset %s: %s" % (target, offset, block))
                 f.seek(offset)
                 f.write(block.blob)
