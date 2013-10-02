@@ -7,9 +7,10 @@ TODO
 3. Implement logger
 4. Make setup.py work
 5. Make tests for syntax
+6. Recognize modified files and handle them correctly
 
 Featureset for v1.0.0
-----
+---------------------
 * Deduplicates at block level
 * Rabin sliding window to detirmine blocks
 * Store hashes of blocks
