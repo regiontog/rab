@@ -1,4 +1,5 @@
 from database import snapshot, block
+from functools import partial
 import logging
 import rabin
 import os
@@ -28,14 +29,13 @@ class Parse:
     @staticmethod
     def _read_file(file):
         logger.debug("Reading file %s" % file)
-        while "read":
-            chunk = file.read(Parse.buffer_size)
-            if chunk:
-                Parse.data = ''.join([Parse.data, chunk])
-                Parse.rab.update(chunk)
-            else:   #EOF
-                Parse._flush()
-                break
+
+        for chunk in iter(partial(file.read, Parse.buffer_size), ''):
+            Parse.data = ''.join([Parse.data, chunk])
+            Parse.rab.update(chunk)
+
+        else:  #EOF
+            Parse._flush()
 
     @staticmethod
     def _block_reached(offset, size, fp):
