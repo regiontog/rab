@@ -67,7 +67,7 @@ def add(name, paths):
     for path in each([p for p in paths]):
         Parse.parser(path)
 
-def main(argv):
+def main():
     _setup()
     args = docopt(__doc__, version='rab version 0.1.1')
     logger.debug("Got args:\n%s", args)

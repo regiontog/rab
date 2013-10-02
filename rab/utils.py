@@ -20,9 +20,8 @@ def map_args(args, functions):
     for key, val in functions.iteritems():
         if args[key]:
             fn = val.pop(0)
-            new = conv(val)
-            if new:
-                fn(*new)
+            if val:
+                fn(*conv(val))
             else:
                 fn()
 
