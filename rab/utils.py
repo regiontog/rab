@@ -1,3 +1,4 @@
+import os
 def map_args(args, functions):
     """Take a dict args and dict functions,
        iterate functions and if key exists in args
@@ -33,3 +34,31 @@ def each(paths):
                     yield os.path.join(root, basename)
         else:
             yield path
+
+def _setup():
+    import sys
+    import rabin
+    import logging
+
+    file = logging.FileHandler("/home/alan/.rab/log")
+    file.setFormatter(logging.Formatter("%(levelname)s: %(asctime)s - %(name)s --  %(message)s"))
+    file.setLevel(logging.DEBUG)
+
+    console = logging.StreamHandler(sys.stdout)
+    console.setFormatter(logging.Formatter("%(message)s"))
+    console.setLevel(logging.INFO)
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(console)
+    logger.addHandler(file)
+
+    logging.getLogger(__name__).debug("===========")
+    logging.getLogger(__name__).debug("Staring up.")
+    logging.getLogger(__name__).debug("===========")
+
+    kb = 1024
+    rabin.set_window_size(48)
+    rabin.set_min_block_size(8*kb)
+    rabin.set_average_block_size(64*kb-1)
+    rabin.set_max_block_size(256*kb)

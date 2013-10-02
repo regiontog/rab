@@ -1,11 +1,15 @@
 from rab.database import _get
 from rab.database import blocks_con as blocks
+import logging
 import mmh3
+
+logger = logging.getLogger(__name__)
 
 def reset():
     """Delete all blocks stored and initialize empty tabels
        WARNING: Will cause loss of data"""
 
+    logger.debug("Deleting all blocks")
     with blocks as con:
         con.execute("DROP TABLE IF EXISTS hashmap")
         con.execute("CREATE TABLE hashmap(key INT, size INT, value BLOB)")
@@ -23,7 +27,7 @@ class Block():
 
     @classmethod
     def from_key(cls, key):
-        print "Getting block", hex(key)
+        logger.debug("Getting block %s from database", hex(key))
         with blocks as con:
             blob = _get(con, key, select="value", frm="hashmap", where="key")
             size = _get(con, key, select="size" , frm="hashmap", where="key")
@@ -50,9 +54,9 @@ class Block():
 
     def store(self):
         if self.exists():
-            print "-----> Block", self, "already exists"
+            logger.debug("-----> Block %s already exists in database" % self)
         else:
-            print "Inserting", self
+            logger.debug("Inserting %s into database" % self)
             self._store()
 
     def exists(self):
